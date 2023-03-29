@@ -1,4 +1,4 @@
-use crate::response::{NoteData, PreregResponse, SinglePreregResponse};
+use crate::response::{PreregistrationData, PreregResponse, SinglePreregResponse};
 use crate::{
     error::Error::*, model::PreregistrationModel, schema::CreatePreregSchema, Result,
 };
@@ -8,7 +8,7 @@ use mongodb::{bson, options::ClientOptions, Client, Collection};
 
 #[derive(Clone, Debug)]
 pub struct DB {
-    pub note_collection: Collection<PreregistrationModel>,
+    pub preregistration_collection: Collection<PreregistrationModel>,
     pub collection: Collection<Document>,
 }
 
@@ -17,8 +17,8 @@ impl DB {
         let mongodb_uri: String = std::env::var("DATABASE_URL").expect("DATABASE_URL must be set.");
         let database_name: String =
             std::env::var("MONGO_INITDB_DATABASE").expect("MONGO_INITDB_DATABASE must be set.");
-        let mongodb_note_collection: String =
-            std::env::var("MONGODB_NOTE_COLLECTION").expect("MONGODB_NOTE_COLLECTION must be set.");
+        let mongodb_preregistration_collection: String =
+            std::env::var("MONGODB_PREREGISTRATION_COLLECTION").expect("MONGODB_PREREGISTRATION_COLLECTION must be set.");
 
         let mut client_options = ClientOptions::parse(mongodb_uri).await?;
         client_options.app_name = Some(database_name.to_string());
@@ -26,13 +26,13 @@ impl DB {
         let client = Client::with_options(client_options)?;
         let database = client.database(database_name.as_str());
 
-        let note_collection = database.collection(mongodb_note_collection.as_str());
-        let collection = database.collection::<Document>(mongodb_note_collection.as_str());
+        let preregistration_collection = database.collection(mongodb_preregistration_collection.as_str());
+        let collection = database.collection::<Document>(mongodb_preregistration_collection.as_str());
 
         println!("✅ Database connected successfully");
 
         Ok(Self {
-            note_collection,
+            preregistration_collection,
             collection,
         })
     }
@@ -67,7 +67,7 @@ impl DB {
 
 
         let note_doc = self
-            .note_collection
+            .preregistration_collection
             .find_one(doc! {"_id":new_id }, None)
             .await
             .map_err(MongoQueryError)?;
@@ -78,7 +78,7 @@ impl DB {
 
         let note_response = SinglePreregResponse {
             status: "success".to_string(),
-            data: NoteData {
+            data: PreregistrationData {
                 note: self.doc_to_note(&note_doc.unwrap()).unwrap(),
             },
         };

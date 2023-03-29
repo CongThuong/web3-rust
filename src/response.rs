@@ -22,13 +22,13 @@ pub struct PreregResponse {
 }
 
 #[derive(Serialize, Debug)]
-pub struct NoteData {
+pub struct PreregistrationData {
     pub note: PreregResponse,
 }
 
 #[derive(Serialize, Debug)]
 pub struct SinglePreregResponse {
     pub status: String,
-    pub data: NoteData,
+    pub data: PreregistrationData,
 }
 
