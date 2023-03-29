@@ -4,8 +4,7 @@ use crate::{
 };
 use chrono::prelude::*;
 use mongodb::bson::{doc, Document};
-use mongodb::options::{IndexOptions};
-use mongodb::{bson, options::ClientOptions, Client, Collection, IndexModel};
+use mongodb::{bson, options::ClientOptions, Client, Collection};
 
 #[derive(Clone, Debug)]
 pub struct DB {
@@ -42,17 +41,6 @@ impl DB {
     pub async fn create_prereg(&self, body: &CreateNoteSchema) -> Result<Option<SingleNoteResponse>> {
         let serialized_data = bson::to_bson(&body).map_err(MongoSerializeBsonError)?;
         let document = serialized_data.as_document().unwrap();
-        let options = IndexOptions::builder().unique(true).build();
-        let index = IndexModel::builder()
-            .keys(doc! {"title": 1})
-            .options(options)
-            .build();
-
-        self.note_collection
-            .create_index(index, None)
-            .await
-            .expect("error creating index!");
-
         let datetime = Utc::now();
 
         let mut doc_with_dates = doc! {"createdAt": datetime, "updatedAt": datetime};

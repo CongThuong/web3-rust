@@ -17,8 +17,6 @@ pub async fn health_checker_handler() -> WebResult<impl Reply> {
 }
 
 pub async fn create_preregistration_handler(body: CreateNoteSchema, db: DB) -> WebResult<impl Reply> {
-                eprintln!("Error during mongodb query: {:?}", body);
-
     let result = db.create_prereg(&body).await.map_err(|e| reject::custom(e))?;
 
     Ok(with_status(json(&result), StatusCode::CREATED))
