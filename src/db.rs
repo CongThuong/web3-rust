@@ -66,29 +66,29 @@ impl DB {
             .expect("issue with new _id");
 
 
-        let note_doc = self
+        let preregistration_doc = self
             .preregistration_collection
             .find_one(doc! {"_id":new_id }, None)
             .await
             .map_err(MongoQueryError)?;
 
-        if note_doc.is_none() {
+        if preregistration_doc.is_none() {
             return Ok(None);
         }
 
-        let note_response = SinglePreregResponse {
+        let preregistration_response = SinglePreregResponse {
             status: "success".to_string(),
             data: PreregistrationData {
-                note: self.doc_to_note(&note_doc.unwrap()).unwrap(),
+                preregistration: self.doc_to_note(&preregistration_doc.unwrap()).unwrap(),
             },
         };
 
-        Ok(Some(note_response))
+        Ok(Some(preregistration_response))
     }
 
 
     fn doc_to_note(&self, note: &PreregistrationModel) -> Result<PreregResponse> {
-        let note_response = PreregResponse {
+        let preregistration_response = PreregResponse {
             id: note.web3id.to_owned(),
             first_name: note.first_name.to_owned(),
             sur_name: note.sur_name.to_owned(),
@@ -100,6 +100,6 @@ impl DB {
             updatedAt: note.updatedAt,
         };
 
-        Ok(note_response)
+        Ok(preregistration_response)
     }
 }

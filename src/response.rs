@@ -23,7 +23,7 @@ pub struct PreregResponse {
 
 #[derive(Serialize, Debug)]
 pub struct PreregistrationData {
-    pub note: PreregResponse,
+    pub preregistration: PreregResponse,
 }
 
 #[derive(Serialize, Debug)]
