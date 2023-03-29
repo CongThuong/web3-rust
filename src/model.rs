@@ -7,8 +7,12 @@ use serde::{Deserialize, Serialize};
 pub struct NoteModel {
     #[serde(rename = "_id")]
     pub id: ObjectId,
-    pub title: String,
-    pub content: String,
+    pub first_name: String,
+    pub sur_name: String,
+    pub product: String,
+    pub email: String,
+    pub organization: String,
+    pub message: String,
     pub category: Option<String>,
     pub published: Option<bool>,
     #[serde(with = "bson::serde_helpers::chrono_datetime_as_bson_datetime")]

@@ -102,8 +102,12 @@ impl DB {
     fn doc_to_note(&self, note: &NoteModel) -> Result<NoteResponse> {
         let note_response = NoteResponse {
             id: note.id.to_hex(),
-            title: note.title.to_owned(),
-            content: note.content.to_owned(),
+            first_name: note.first_name.to_owned(),
+            sur_name: note.sur_name.to_owned(),
+            product: note.product.to_owned(),
+            email: note.email.to_owned(),
+            organization: note.organization.to_owned(),
+            message: note.message.to_owned(),
             category: note.category.to_owned().unwrap(),
             published: note.published.unwrap(),
             createdAt: note.createdAt,

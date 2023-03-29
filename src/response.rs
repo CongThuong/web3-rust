@@ -11,8 +11,12 @@ pub struct GenericResponse {
 #[derive(Serialize, Debug)]
 pub struct NoteResponse {
     pub id: String,
-    pub title: String,
-    pub content: String,
+    pub first_name: String,
+    pub sur_name: String,
+    pub product: String,
+    pub email: String,
+    pub organization: String,
+    pub message: String,
     pub category: String,
     pub published: bool,
     pub createdAt: DateTime<Utc>,

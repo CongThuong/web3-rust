@@ -7,8 +7,6 @@ pub struct ParamOptions {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct CreateNoteSchema {
-    pub title: String,
-    pub content: String,
     pub id: String,
     pub first_name: String,
     pub sur_name: String,
