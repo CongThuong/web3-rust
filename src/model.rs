@@ -7,6 +7,7 @@ use serde::{Deserialize, Serialize};
 pub struct NoteModel {
     #[serde(rename = "_id")]
     pub id: ObjectId,
+    pub web3id: String,
     pub first_name: String,
     pub sur_name: String,
     pub product: String,

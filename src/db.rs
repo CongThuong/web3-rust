@@ -42,8 +42,9 @@ impl DB {
         let serialized_data = bson::to_bson(&body).map_err(MongoSerializeBsonError)?;
         let document = serialized_data.as_document().unwrap();
         let datetime = Utc::now();
+        let web3id = body.id.to_owned();
 
-        let mut doc_with_dates = doc! {"createdAt": datetime, "updatedAt": datetime};
+        let mut doc_with_dates = doc! {"createdAt": datetime, "updatedAt": datetime, "web3id": web3id};
         doc_with_dates.extend(document.clone());
 
         let insert_result = self
@@ -63,6 +64,7 @@ impl DB {
             .inserted_id
             .as_object_id()
             .expect("issue with new _id");
+
 
         let note_doc = self
             .note_collection
@@ -87,7 +89,7 @@ impl DB {
 
     fn doc_to_note(&self, note: &NoteModel) -> Result<NoteResponse> {
         let note_response = NoteResponse {
-            id: note.id.to_hex(),
+            id: note.web3id.to_owned(),
             first_name: note.first_name.to_owned(),
             sur_name: note.sur_name.to_owned(),
             product: note.product.to_owned(),
