@@ -1,12 +1,6 @@
 use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Debug)]
-pub struct FilterOptions {
-    pub page: Option<usize>,
-    pub limit: Option<usize>,
-}
-
-#[derive(Deserialize, Debug)]
 pub struct ParamOptions {
     pub id: String,
 }
@@ -15,18 +9,14 @@ pub struct ParamOptions {
 pub struct CreateNoteSchema {
     pub title: String,
     pub content: String,
+    pub id: String,
+    pub first_name: String,
+    pub sur_name: String,
+    pub product: String,
+    pub organization: String,
+    pub email: String,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub category: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub published: Option<bool>,
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-pub struct UpdateNoteSchema {
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub title: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub content: Option<String>,
+    pub message: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub category: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]

@@ -15,12 +15,8 @@ pub enum Error {
     MongoDuplicateError(mongodb::error::Error),
     #[error("could not serialize data: {0}")]
     MongoSerializeBsonError(bson::ser::Error),
-    // #[error("could not deserialize bson: {0}")]
-    // MongoDeserializeBsonError(bson::de::Error),
     #[error("could not access field in document: {0}")]
     MongoDataError(#[from] bson::document::ValueAccessError),
-    #[error("invalid id used: {0}")]
-    InvalidIDError(String),
 }
 
 impl warp::reject::Reject for Error {}
@@ -64,29 +60,12 @@ pub async fn handle_rejection(err: Rejection) -> std::result::Result<Box<dyn Rep
                 code = StatusCode::INTERNAL_SERVER_ERROR;
                 message = "Error seserializing BSON";
             }
-            // Error::MongoDeserializeBsonError(e) => {
-            //     eprintln!("Error deserializing BSON: {:?}", e);
-            //     status = "fail";
-            //     code = StatusCode::INTERNAL_SERVER_ERROR;
-            //     message = "Error deserializing BSON";
-            // }
             Error::MongoDataError(e) => {
                 eprintln!("validation error: {:?}", e);
                 status = "fail";
                 code = StatusCode::BAD_REQUEST;
                 message = "validation error";
             }
-            Error::InvalidIDError(e) => {
-                eprintln!("Invalid ID: {:?}", e);
-                status = "fail";
-                code = StatusCode::BAD_REQUEST;
-                message = e.as_str();
-            } // _ => {
-              //     eprintln!("unhandled application error: {:?}", err);
-              //     status = "error";
-              //     code = StatusCode::INTERNAL_SERVER_ERROR;
-              //     message = "Internal Server Error";
-              // }
         }
     } else if let Some(_) = err.find::<warp::reject::MethodNotAllowed>() {
         status = "failed";

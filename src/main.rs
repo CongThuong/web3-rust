@@ -7,7 +7,6 @@ mod schema;
 
 use db::DB;
 use dotenv::dotenv;
-use schema::FilterOptions;
 use std::convert::Infallible;
 use warp::{http::Method, Filter, Rejection};
 
@@ -24,50 +23,32 @@ async fn main() -> Result<()> {
     let db = DB::init().await?;
 
     let cors = warp::cors()
-        .allow_methods(&[Method::GET, Method::POST, Method::PATCH, Method::DELETE])
+        .allow_methods(&[Method::GET, Method::POST, Method::PUT])
         .allow_origins(vec!["http://localhost:3000"])
         .allow_headers(vec!["content-type"])
         .allow_credentials(true);
 
-    let note_router = warp::path!("api" / "notes");
-    let note_router_id = warp::path!("api" / "notes" / String);
+    // API check connection
     let health_checker = warp::path!("api" / "healthchecker")
         .and(warp::get())
         .and_then(handler::health_checker_handler);
 
-    let note_routes = note_router
+    // preregistration_router
+    let preregistration_router = warp::path!("preregistration");
+    let preregistration_routes = preregistration_router
         .and(warp::post())
         .and(warp::body::json())
         .and(with_db(db.clone()))
-        .and_then(handler::create_note_handler)
-        .or(note_router
-            .and(warp::get())
-            .and(warp::query::<FilterOptions>())
-            .and(with_db(db.clone()))
-            .and_then(handler::notes_list_handler));
+        .and_then(handler::create_preregistration_handler);
 
-    let note_routes_id = note_router_id
-        .and(warp::patch())
-        .and(warp::body::json())
-        .and(with_db(db.clone()))
-        .and_then(handler::edit_note_handler)
-        .or(note_router_id
-            .and(warp::get())
-            .and(with_db(db.clone()))
-            .and_then(handler::get_note_handler))
-        .or(note_router_id
-            .and(warp::delete())
-            .and(with_db(db.clone()))
-            .and_then(handler::delete_note_handler));
 
-    let routes = note_routes
+    let routes = preregistration_routes
         .with(warp::log("api"))
-        .or(note_routes_id)
         .or(health_checker)
         .with(cors)
         .recover(error::handle_rejection);
 
-    println!("🚀 Server started successfully");
+    println!("Server started successfully");
     warp::serve(routes).run(([0, 0, 0, 0], 8000)).await;
     Ok(())
 }

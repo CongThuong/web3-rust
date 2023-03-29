@@ -1151,7 +1151,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "rust-mongodb-crud"
+name = "rust-web3id"
 version = "0.1.0"
 dependencies = [
  "chrono",
