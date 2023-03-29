@@ -1,6 +1,6 @@
-use crate::response::{NoteData, NoteResponse, SingleNoteResponse};
+use crate::response::{NoteData, PreregResponse, SinglePreregResponse};
 use crate::{
-    error::Error::*, model::NoteModel, schema::CreateNoteSchema, Result,
+    error::Error::*, model::PreregistrationModel, schema::CreatePreregSchema, Result,
 };
 use chrono::prelude::*;
 use mongodb::bson::{doc, Document};
@@ -8,7 +8,7 @@ use mongodb::{bson, options::ClientOptions, Client, Collection};
 
 #[derive(Clone, Debug)]
 pub struct DB {
-    pub note_collection: Collection<NoteModel>,
+    pub note_collection: Collection<PreregistrationModel>,
     pub collection: Collection<Document>,
 }
 
@@ -38,7 +38,7 @@ impl DB {
     }
 
 
-    pub async fn create_prereg(&self, body: &CreateNoteSchema) -> Result<Option<SingleNoteResponse>> {
+    pub async fn create_prereg(&self, body: &CreatePreregSchema) -> Result<Option<SinglePreregResponse>> {
         let serialized_data = bson::to_bson(&body).map_err(MongoSerializeBsonError)?;
         let document = serialized_data.as_document().unwrap();
         let datetime = Utc::now();
@@ -76,7 +76,7 @@ impl DB {
             return Ok(None);
         }
 
-        let note_response = SingleNoteResponse {
+        let note_response = SinglePreregResponse {
             status: "success".to_string(),
             data: NoteData {
                 note: self.doc_to_note(&note_doc.unwrap()).unwrap(),
@@ -87,8 +87,8 @@ impl DB {
     }
 
 
-    fn doc_to_note(&self, note: &NoteModel) -> Result<NoteResponse> {
-        let note_response = NoteResponse {
+    fn doc_to_note(&self, note: &PreregistrationModel) -> Result<PreregResponse> {
+        let note_response = PreregResponse {
             id: note.web3id.to_owned(),
             first_name: note.first_name.to_owned(),
             sur_name: note.sur_name.to_owned(),

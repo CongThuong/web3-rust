@@ -6,7 +6,7 @@ pub struct ParamOptions {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-pub struct CreateNoteSchema {
+pub struct CreatePreregSchema {
     pub id: String,
     pub first_name: String,
     pub sur_name: String,

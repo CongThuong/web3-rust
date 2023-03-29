@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 
 #[allow(non_snake_case)]
 #[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct NoteModel {
+pub struct PreregistrationModel {
     #[serde(rename = "_id")]
     pub id: ObjectId,
     pub web3id: String,

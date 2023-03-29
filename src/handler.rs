@@ -1,7 +1,7 @@
 use crate::{
     db::DB,
     response::GenericResponse,
-    schema::{CreateNoteSchema},
+    schema::{CreatePreregSchema},
     WebResult,
 };
 use warp::{http::StatusCode, reject, reply::json, reply::with_status, Reply};
@@ -16,7 +16,7 @@ pub async fn health_checker_handler() -> WebResult<impl Reply> {
     Ok(json(response_json))
 }
 
-pub async fn create_preregistration_handler(body: CreateNoteSchema, db: DB) -> WebResult<impl Reply> {
+pub async fn create_preregistration_handler(body: CreatePreregSchema, db: DB) -> WebResult<impl Reply> {
     let result = db.create_prereg(&body).await.map_err(|e| reject::custom(e))?;
 
     Ok(with_status(json(&result), StatusCode::CREATED))

@@ -9,7 +9,7 @@ pub struct GenericResponse {
 
 #[allow(non_snake_case)]
 #[derive(Serialize, Debug)]
-pub struct NoteResponse {
+pub struct PreregResponse {
     pub id: String,
     pub first_name: String,
     pub sur_name: String,
@@ -23,11 +23,11 @@ pub struct NoteResponse {
 
 #[derive(Serialize, Debug)]
 pub struct NoteData {
-    pub note: NoteResponse,
+    pub note: PreregResponse,
 }
 
 #[derive(Serialize, Debug)]
-pub struct SingleNoteResponse {
+pub struct SinglePreregResponse {
     pub status: String,
     pub data: NoteData,
 }
