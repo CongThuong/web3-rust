@@ -15,8 +15,4 @@ pub struct CreateNoteSchema {
     pub email: String,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub category: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub published: Option<bool>,
 }

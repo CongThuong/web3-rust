@@ -13,8 +13,6 @@ pub struct NoteModel {
     pub email: String,
     pub organization: String,
     pub message: String,
-    pub category: Option<String>,
-    pub published: Option<bool>,
     #[serde(with = "bson::serde_helpers::chrono_datetime_as_bson_datetime")]
     pub createdAt: DateTime<Utc>,
     #[serde(with = "bson::serde_helpers::chrono_datetime_as_bson_datetime")]

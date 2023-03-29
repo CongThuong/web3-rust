@@ -17,8 +17,6 @@ pub struct NoteResponse {
     pub email: String,
     pub organization: String,
     pub message: String,
-    pub category: String,
-    pub published: bool,
     pub createdAt: DateTime<Utc>,
     pub updatedAt: DateTime<Utc>,
 }
@@ -34,9 +32,3 @@ pub struct SingleNoteResponse {
     pub data: NoteData,
 }
 
-#[derive(Serialize, Debug)]
-pub struct NoteListResponse {
-    pub status: String,
-    pub results: usize,
-    pub notes: Vec<NoteResponse>,
-}

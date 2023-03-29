@@ -40,8 +40,6 @@ impl DB {
 
 
     pub async fn create_prereg(&self, body: &CreateNoteSchema) -> Result<Option<SingleNoteResponse>> {
-        let published = body.published.to_owned().unwrap_or(false);
-        let category = body.category.to_owned().unwrap_or("".to_string());
         let serialized_data = bson::to_bson(&body).map_err(MongoSerializeBsonError)?;
         let document = serialized_data.as_document().unwrap();
         let options = IndexOptions::builder().unique(true).build();
@@ -57,7 +55,7 @@ impl DB {
 
         let datetime = Utc::now();
 
-        let mut doc_with_dates = doc! {"createdAt": datetime, "updatedAt": datetime, "published": published, "category": category};
+        let mut doc_with_dates = doc! {"createdAt": datetime, "updatedAt": datetime};
         doc_with_dates.extend(document.clone());
 
         let insert_result = self
@@ -108,8 +106,6 @@ impl DB {
             email: note.email.to_owned(),
             organization: note.organization.to_owned(),
             message: note.message.to_owned(),
-            category: note.category.to_owned().unwrap(),
-            published: note.published.unwrap(),
             createdAt: note.createdAt,
             updatedAt: note.updatedAt,
         };
